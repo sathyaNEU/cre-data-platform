@@ -143,7 +143,6 @@ CREATE TABLE IF NOT EXISTS cre_catalog.gold.dim_hotel (
     parid                   STRING,                     -- links to dim_property
     owner_name              STRING,
     bldg_class              STRING,                     -- H2, H3, HB etc.
-    tax_class               INT,
     street_number           STRING,
     street_name             STRING,
     zip_code                STRING,
@@ -151,12 +150,11 @@ CREATE TABLE IF NOT EXISTS cre_catalog.gold.dim_hotel (
     latitude                DOUBLE,
     longitude               DOUBLE,
     h3_index                STRING,
-    tax_year                INT,
     nta_name                STRING,
     load_date               DATE
 )
 USING DELTA
-COMMENT 'Hotel properties derived from NYC hotel tax parcel dataset. One row per hotel parcel.';
+COMMENT 'Hotel properties. One row per hotel parcel — deduplicated to latest year.';
 
 -- ── dim_restaurant ────────────────────────────────────────
 CREATE TABLE IF NOT EXISTS cre_catalog.gold.dim_restaurant (
@@ -168,10 +166,6 @@ CREATE TABLE IF NOT EXISTS cre_catalog.gold.dim_restaurant (
     street_name             STRING,
     zip_code                STRING,
     cuisine_type            STRING,
-    inspection_score        INT,                        -- lower = better
-    grade                   STRING,                     -- A, B, C, Z, P
-    grade_date              STRING,
-    last_inspection_date    STRING,
     latitude                DOUBLE,
     longitude               DOUBLE,
     h3_index                STRING,
@@ -184,8 +178,6 @@ COMMENT 'Restaurants derived from NYC DOH inspection records. One row per restau
 -- ══════════════════════════════════════════════════════════
 -- FACT TABLES
 -- ══════════════════════════════════════════════════════════
-
--- ── fact_tax_assessment ───────────────────────────────────
 
 -- ── fact_tax_assessment ───────────────────────────────────
 CREATE TABLE IF NOT EXISTS cre_catalog.gold.fact_tax_assessment (
